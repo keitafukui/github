@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="js/jquery-2.1.3.min.js"></script>
+  <link rel="stylesheet" href="css/sample.css">
+  <title>じゃんけん</title>
+</head>
+
+<body>
+
+  <header>
+    <h1>じゃんけん</h1>
+  </header>
+
+  <main>
+    <ul>
+      <li id="gu_btn">グー</li>
+      <li id="cho_btn">チョキ</li>
+      <li id="par_btn">パー</li>
+    </ul>
+    <div>コンピュータの出した手は？「<span id="pc_hands">なに？</span>」</div>
+    <div id="judgement">You Win!</div>
+    <div id="wins" onclick="changeColor"></div>
+    <img id="image_file" src="">
+    <iframe id="special_movie" width="560" height="315" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+  </main>
+
+  <footer></footer>
+  <script>
+    //じゃんけん用のSCRIPTを書いてください
+    let jan = ["グー", "チョキ", "パー"]
+    let human;
+    let human_number;
+    let computer_number;
+    let computer;
+    let janresult;
+    let wincount = 0;
+    let img;
+
+    // 勝ち負け判定→文字を変える
+    function result() {
+      if ((human_number == 0 && computer_number == 0) || (human_number == 1 && computer_number == 1) || (human_number == 2 && computer_number == 2)) { janresult = "Draw... Again!!" }
+      else if ((human_number == 0 && computer_number == 1) || (human_number == 1 && computer_number == 2) || (human_number == 2 && computer_number == 0)) { janresult = "You WIN!!"; wincount++ }
+      else if ((human_number == 0 && computer_number == 2) || (human_number == 1 && computer_number == 0) || (human_number == 2 && computer_number == 1)) { janresult = "You LOSE!!"; wincount = 0 }
+      else { janresult = "error" };
+      document.getElementById('judgement').innerText = janresult;
+      special();
+    }
+      // 3連勝するとスペシャル動画になる
+      function special() {
+        if (wincount == 1 || wincount == 2) { document.getElementById('wins').innerText = wincount + "連勝";  }
+        else if (wincount == 3) { document.getElementById('wins').innerText = wincount + "連勝おめでとう！";
+         img.src = ""; 
+         special_movie.src="https://www.youtube.com/embed/rm4NtEAbQYw?autoplay=1&mute=1&start=85&end=90" ;
+         wincount = 0 }
+        else { document.getElementById('wins').innerText = "" };
+      }
+    //コンピュータの手に従って画像を表示する  
+    function img1() {
+       img = document.getElementById("image_file");
+      if (computer_number == 0) {img.src = "./img/jan gu.jpg" }
+      else if (computer_number == 1) { img.src = "./img/jan choki.png" }
+      else { img.src = "./img/jan par.png" };
+      $('img').fadeToggle(3000);
+    } 
+
+    //↓Delay関数で開始遅延。ほしい結果ではなかった。。毎回文字と画像をFade inさせたい。
+    // $("#gu_btn").on("click", function delayExec() {
+    //   setTimeout(
+    //     function () {
+    //     human_number = 0;
+    //     human = jan[human_number];
+    //     computer_number = Math.floor(Math.random() * 3);
+    //     computer = jan[computer_number];
+    //     document.getElementById('pc_hands').innerText = computer;
+    //     img1();
+    //     result();
+    //   }, 
+    //   2000);
+    // }
+    // );
+
+    $("#gu_btn").on("click", function () {
+       // コンピュータの手は配列0~2からランダムに取得する。人間はボタンごとに定数。
+        human_number = 0;
+        human = jan[human_number];
+        computer_number = Math.floor(Math.random() * 3);
+        computer = jan[computer_number];
+        // コンピュータの手の文字を変更
+        //↓Fadein がうまくいかず。。 
+        // $('pc_hands').fadeIn(300, function(){document.getElementById('pc_hands').innerText = computer});        
+        document.getElementById('pc_hands').innerText = computer;
+        // 画像を表示
+        img1();
+        // 結果を表示
+        result();
+      }
+    );
+
+    $("#cho_btn").on("click", function () {
+      human_number = 1;
+      human = jan[human_number];
+      computer_number = Math.floor(Math.random() * 3);
+      computer = jan[computer_number];
+      document.getElementById('pc_hands').innerText = computer;
+      img1();
+      result();
+    }
+    );
+
+    $("#par_btn").on("click", function () {
+      human_number = 2;
+      human = jan[human_number];
+      computer_number = Math.floor(Math.random() * 3);
+      computer = jan[computer_number];
+      document.getElementById('pc_hands').innerText = computer;
+      img1();
+      result();
+    }
+    );
+
+
+  </script>
+</body>
+
+</html>
