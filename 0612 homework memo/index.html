@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Rugby</title>
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Easy Rugby</h1>
+    </header>
+    <Main>
+        <section id = "PlayField">
+           <ul>
+            <li id="A_img">敵A
+                <img src="./images/RugPlayer.png" alt="">
+            </li>
+            <li id="B_img">敵B
+                <img src="./images/RugPlayer.png" alt="">
+            </li>
+            <li id="C_img">敵C
+                <img src="./images/RugPlayer.png" alt="">
+            </li>
+          </ul>
+           <ul>
+            <li id="A_btn">Aにアタック</li>
+            <li id="B_btn">Bにアタック</li>
+            <li id="C_btn">Cにアタック</li>
+          </ul>
+          <div id="Ballimg">
+            <img src="./images/RugBall.png" alt="">
+          </div>
+          <div>相手チーム「<span id="pc_hands">へなちょこタックル！</span>」</div>
+          <div id="judgement">突破！</div>
+        </section>
+
+        <section id="GameResult">
+            <div id="wrapper">
+                
+                <div id="Counter">
+                    <div id="Clock">
+                        時間
+                    </div>
+                    <div id="Phase">
+                    </div>
+                    <div id="wins">
+                    </div>
+
+                </div>
+                <div>
+                    <table id="ScoreBoard">
+                        <tr>スコア<th id= "myscore">0</th><td id= "yourscore">0</td></tr>
+                    </table>
+                    
+                </div>
+                <div>
+                    <table id="list">
+                </div>
+                <div id="ImageBoard">
+                    <img id= "image_file" src="" alt="">
+                </div>
+
+            </div>
+        </section>
+    </Main>
+
+    <Footer>
+        <h1>©2023 Easy Rugby Co.,Ltd. All Rights Reserverd</h1>
+    </Footer>
+
+    
+</body>
+</html>
+
+
+<script>
+    let jan = ["Aが攻撃", "Bが攻撃", "Cが攻撃"]
+    let human;
+    let human_number;
+    let computer_number;
+    let computer;
+    let janresult;
+    let wincount = 0;
+    let img;
+    let time = 0;
+    let phaseCount =0;
+    let scoreCount =0;
+
+
+    // 勝ち負け判定→文字を変える
+    function result() {
+      if ((human_number == 0 && computer_number == 0) || (human_number == 1 && computer_number == 1) || (human_number == 2 && computer_number == 2)) { janresult = "普通!!" }
+      else if ((human_number == 0 && computer_number == 1) || (human_number == 1 && computer_number == 2) || (human_number == 2 && computer_number == 0)) { janresult = "アタック成功!!"; wincount++ }
+      else if ((human_number == 0 && computer_number == 2) || (human_number == 1 && computer_number == 0) || (human_number == 2 && computer_number == 1)) { janresult = "アタック失敗!!"; wincount = 0 }
+      else { janresult = "error" };
+      document.getElementById('judgement').innerText = janresult;
+      special();
+    }
+      // 3連勝するとスペシャル画像になる
+      function special() {
+        if (wincount == 0|| wincount == 1 || wincount == 2) {
+            document.getElementById('wins').innerText = wincount + "フェーズ";  
+            img = document.getElementById("image_file");
+            img.src ="";
+            }
+        else if (wincount == 3) { document.getElementById('wins').innerText =  "トライ！！";
+         img = document.getElementById("image_file");
+         img.src ="./images/Faf naked.webp";
+
+         scoreCount++;
+         document.getElementById('myscore').innerText =  scoreCount*5 ;
+         
+        //  const key = $("clock").val();
+        //  const value = $("myscore").val();
+         localStorage.setItem(Clock,myscore);
+         const html = '<tr><th>'+Clock+'</th><td>'+myscore+'</td></tr>';
+         $("#list").append(html);
+         wincount = 0 }
+        else { 
+            document.getElementById('wins').innerText = "" };
+      }
+
+    $("#A_btn").on("click", function () {
+       // コンピュータの手は配列0~2からランダムに取得する。人間はボタンごとに定数。
+        human_number = 0;
+        human = jan[human_number];
+        computer_number = Math.floor(Math.random() * 3);
+        computer = jan[computer_number];
+        document.getElementById('pc_hands').innerText = computer;
+        phaseCount++;
+        document.getElementById('Clock').innerText =  phaseCount*2 + "分";
+        // 結果を表示
+        result();
+      }
+    );
+
+    $("#B_btn").on("click", function () {
+      human_number = 1;
+      human = jan[human_number];
+      computer_number = Math.floor(Math.random() * 3);
+      computer = jan[computer_number];
+      document.getElementById('pc_hands').innerText = computer;
+      phaseCount++;
+      
+      result();
+    }
+    );
+
+    $("#C_btn").on("click", function () {
+      human_number = 2;
+      human = jan[human_number];
+      computer_number = Math.floor(Math.random() * 3);
+      computer = jan[computer_number];
+      document.getElementById('pc_hands').innerText = computer;
+      phaseCount++;
+      result();
+    }
+    );
+
+</script>

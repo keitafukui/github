@@ -1,0 +1,100 @@
+body{
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    font-size: 32px;
+    width: 100%;
+}
+
+header{
+    background-color: #fff;
+    border-bottom: 1px solid black;
+    text-align: center;
+}
+
+h1{
+    font-size: 100%;
+}
+
+main{
+    width: 100%;
+    display: flex;
+    border-bottom: 1px solid black;
+    text-align: center;
+    position: relative;
+    align-content:space-around;
+}
+
+#GameResult {
+  width: 46%;
+	margin: 20px 2%;
+  background-color:green;
+}
+
+#clock{
+  background-color: purple;
+}
+
+
+#PlayField{
+  margin: 20px 2%;
+  width: 46%;
+  background-color:orange;
+}
+
+ul {
+  padding: 0;
+  border-top: 1px solid #000000;
+  display: table;
+  /* 定義 */
+  table-layout: fixed;
+  width: 100%;
+}
+
+li {
+  text-align: center;
+  list-style-type: none;
+  border: 1px solid #666;
+  background-color: #FFF;
+  display: table-cell;
+  /* 定義 */
+  cursor: pointer;
+}
+
+li:hover {
+  background: #0066CC;
+  color: #fff;
+}
+
+img{
+	max-width: 100%;
+	height: auto;
+	vertical-align: top;
+}
+
+table {
+    margin: 20px 3%;
+    border: 1px solid #8dc3f5;
+    width: 100%;
+  }
+
+th {
+width: 50%;
+font-size: 24px;
+background-color: rgb(241, 239, 239);
+border-bottom: 1px solid #8dc3f5;
+}
+
+td {
+font-size: 24px;
+background-color: rgb(241, 239, 239);
+border-bottom: 1px solid #8dc3f5;
+}
+
+
+footer {
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+
