@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chat app</title>
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+    <header>
+        Easy chat app
+    </header>
+    <main>
+        <div>
+            <div>
+                名前: <input type="text" id="uname">
+            </div>
+            <div>
+                <textarea name="" id="text" cols="80" rows="10"></textarea>
+                <br>
+                <button id="send">送信</button>
+            </div>
+            <div id="output"></div>
+        </div>
+    </main>
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- JQuery -->
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+        import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved }
+            from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-database.js";
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBaiEagDuT64S3xdIw_hUIhr00HMTkNJ3Q",
+            authDomain: "chat-app-demo-2be65.firebaseapp.com",
+            projectId: "chat-app-demo-2be65",
+            storageBucket: "chat-app-demo-2be65.appspot.com",
+            messagingSenderId: "406569350636",
+            appId: "1:406569350636:web:6805ac817d708ce6433cc9"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        //Realtime DBに接続する
+        const db = getDatabase(app);  // RealtimeDBに接続
+        const dbRef = ref(db, "chat"); // "chat"のAPPに接続
+
+        //送信ボタンが押されたらデータをDBに送信する
+        $("#send").on("click", function () {
+            // 保存したいデータのオブジェクトを作る
+            const msg = {
+                uname: $("#uname").val(),
+                text: $("#text").val()
+            };
+
+            // 新規のデータを送れる状態にセット→ユニークキーを生成する
+            const newPostRef = push(dbRef);
+            // DBに値を送信
+            set(newPostRef, msg);
+        });
+        // 送信してくるデータを監視する
+        onChildAdded(dbRef, function (data) {
+            const msg = data.val();
+            const key = data.key;
+            // Appendで要素の一番下に追加する
+            $("#output").append(`<p>${msg.uname}:${msg.text} <button id="${key}" class="delete">削除</button>  </p>`)
+        })
+
+        // /messageがクリックされたら発火する/
+        $('#output').on('click', '.delete', function () {
+            const thisID = $(this).attr('id');
+            const chatRef = ref(db, "chat".thisID);
+            remove(chatRef);
+        }
+        );
+        // /DBを監視して、消えたらHTMLを消す/
+        onChildRemoved(dbRef, function (data) {
+            $(this).remove()
+        }
+        )
+
+
+    </script>
+
+</body>
+
+</html>

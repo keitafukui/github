@@ -1,0 +1,17 @@
+
+header{
+    font-size: 30px;
+    text-align: center;
+}
+
+
+
+#output {
+    width: 50%;
+    height: 200px;
+    border: solid 1px;
+    overflow-y:auto;
+    overflow-x:scroll;
+    border-radius: 10px;
+    background: lightgray;
+}
