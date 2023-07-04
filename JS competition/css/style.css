@@ -1,0 +1,107 @@
+/*--------------
+ * common structure
+ *--------------*/
+
+.text-center{
+	text-align: center;
+}
+a{
+	text-decoration: none;
+	transition: all 0.5s;
+}
+.wrapper{
+	max-width: 1140px;
+	margin: 0 auto;
+}
+a:hover{
+	opacity:0.5;
+}
+img{
+	max-width: 40%;
+	height: auto;
+	vertical-align: top;
+}
+
+
+/*--------------
+ * header
+ *--------------*/
+
+.header-visual{
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.header-title{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	color: black;
+	font-size: 4.8rem;
+	line-height: 1;
+	text-align: center;
+}
+.header-title__sub{
+	display: block;
+	margin: 40px 0 0;
+	font-size: 0.67em;
+	font-weight: normal;
+}
+/* navigation */
+.header-menu{
+	height: 80px;
+	border-top: solid 1px #efefef;
+	border-bottom: solid 1px #efefef;
+}
+.header-inner{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.logo{
+	max-width: 200px;
+}
+
+.nav{
+	display: flex;
+	justify-content: space-between;
+	margin: 0;
+}
+.nav-item{
+	margin:0 0 0 32px;
+}
+.nav-item>a{
+	display:  block;
+	font-size: 1.2rem;
+	line-height: 80px;
+	text-transform: uppercase;
+}
+
+/* wight-history */
+.recordinput{
+	padding: 20px;
+	font-size:30px;
+}
+
+.date{
+	width: 30px;
+	size: 30;
+}
+.weight{
+	width: 30px;
+	size: 30;
+}
+
+#output {
+    width: 50%;
+    height: 50px;
+    border: solid 1px;
+    overflow-y:scroll;
+    overflow-x:scroll;
+    border-radius: 10px;
+    background: whitesmoke;
+}
+

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Macdonald Mater</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+    <header>
+        <div class="header-visual">
+            <h1 class="header-title">マクドナルドがあなたを変える
+                <span class="header-title__sub">「マクドナルド メーター」</span>
+            </h1>
+            <img src="images/mcd-logo.svg" alt="期間限定">
+        </div>
+    </header>
+
+    <div class="header-menu">
+        <div class="wrapper header-inner">
+            <p class="logo"><a href="#"><img src="images/mcd-logo.svg" alt="マクドロゴ"></a></p>
+            <nav class="nav-outer">
+                <ul class="nav">
+                    <li class="nav-item"><a href="#weight_history">体重記録</a></li>
+                    <li class="nav-item"><a href="#choice">今日の夜は何マック？！</a></li>
+                    <!-- <li class="nav-item"><a href="#game">マクドナルドスイーパー</a></li> -->
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+
+    <main>
+        <div class="weight_history">
+            <div class="recordinput">
+                <!-- 日付 <input type="date" id="date" size=""> -->
+                本日の体重 <input type="number" id="weight" size="30">
+                <!-- 身長 <input type="number" id="height"> -->
+                <button id="send">送信</button>
+                基礎代謝 <textarea name="" id="taisha" cols="10" rows="1"></textarea>
+            </div>
+
+            <div>
+                <canvas id="myChart"></canvas>
+            </div>
+
+            <div id="graph"></div>
+            <!-- <div id="output"></div> -->
+        </div>
+
+        <div id="menu_history">
+
+        </div>
+        朝マック　
+        <select id="morning_menu" multiple size="3">
+            <option value="maffin">ソーセージエッグマフィン</option>
+            <option value="griddle">マックグリドルソーセージ</option>
+            <option value="hash">ハッシュポテト</option>
+        </select>
+        昼マック　
+        <select id="lunch_menu" multiple size="3">
+            <option value="teriyaki">てりやきマックバーガー</option>
+            <option value="dbcheese">ダブルチーズバーガー</option>
+            <option value="bigmac">ビックマック</option>
+        </select>
+
+        夜マック　
+        <select id="dinner_menu" multiple size="3">
+            <option value="hokkaido">北海道じゃがバタてりやき</option>
+            <option value="osaka">大阪お好み焼き風ソースたまごてりやき</option>
+            <option value="hakata">博多明太てりやきチキン</option>
+        </select>
+
+        <div id="menu_choice">
+            <img id="img1" src="">
+            <img id="img2" src="">
+            <img id="img3" src="">
+        </div>
+
+    </main>
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Chart.JS -->
+    <script script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved }
+            from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-database.min.js";
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "",
+            authDomain: "js-competition-f7974.firebaseapp.com",
+            databaseURL: "https://js-competition-f7974-default-rtdb.firebaseio.com",
+            projectId: "js-competition-f7974",
+            storageBucket: "js-competition-f7974.appspot.com",
+            messagingSenderId: "160577664389",
+            appId: "1:160577664389:web:8e42df7bdc391d429040ec"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        //Realtime DBに接続する
+        const db = getDatabase(app);  // RealtimeDBに接続
+        const dbRef = ref(db, "mcdmeter"); // "mcdmeter"のAPPに接続
+
+        // 使用する定数の定義
+        const height = 173;
+        const age = 31;
+        const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        let weights = [77, 77.4, 77.8, 79, 77.8, 77.6, 77.5];
+        const today = new Date();
+        const todaydate = today.getDay();
+
+        //送信ボタンが押されたらデータをDBに送信する
+        $("#send").on("click", function () {
+            // 保存したいデータのオブジェクトを作る
+            // const date = $("#date").val();
+            // const weekday = date.getDay();
+            let wX = $("#weight").val();
+            weights[todaydate] = wX;
+            // const height = $("#height").val();
+            const record = [
+                today,
+                todaydate,
+                // $("#date").val(),
+                wX,
+                // $("#height").val(),
+            ];
+            // 新規のデータを送れる状態にセット→ユニークキーを生成する
+            const newPostRef = push(dbRef);
+            // DBに値を送信
+            set(newPostRef, record);
+
+            // 基礎代謝計算: 66.47＋体重×13.75＋身長×5.0－年齢×6.76＝基礎代謝量
+            // 活動レベル1.3＝静的日常
+            const mytaisha = (66.47 + wX * 13.75 + height * 5.0 - age * 6.76) * 1.3;
+            console.log(mytaisha);
+            document.getElementById("taisha").innerHTML = mytaisha + "kcal";
+
+            // /チャートのデータを更新/
+            const ctx = document.getElementById('myChart');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: '今週の体重推移',
+                        data: weights,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            suggestedMin: 73,
+                            suggestedMax: 80
+                        }
+                    }
+                }
+            });
+        })
+
+        // 朝マックと昼マックを選択するとマック画像が表示され、夜マックがサジェストされる  
+        let nightcal=0;
+
+        $("#morning_menu").on("click",function(){
+            let mb = $("#morning_menu").val();
+            console.log(mb);
+            if(mb=="maffin"){img1.src = "./images/4040maffin.png"; nightcal =+ 100}
+            else if (mb=="hash"){img1.src = "./images/5010hash.png"; nightcal =+ 200}
+            else if (mb== "griddle"){img1.src = "./images/8642griddle.png"; nightcal =+ 300};
+            return nightcal;
+            return mb;
+        });
+        
+ 
+
+        $("#lunch_menu").on("click",function(){
+            let lb = $("#lunch_menu").val();
+            console.log(lb);
+            if(lb=="teriyaki"){img2.src = "./images/1010teriyaki.png"; return nightcal}
+            else if (lb=="dbcheese"){img2.src = "./images/1360dbcheese.png"}
+            else if (lb== "bigmac"){img2.src = "./images/1210Bigmac.png"};
+            return lb;
+        });
+
+        $("#dinner_menu").on("click",function(){
+            let db = $("#dinner_menu").val();
+            console.log(db);
+            if(mb=="hash" && lb == "teriyaki"){
+            if (db=="hokkaido"){img3.src = "./images/1134 hokkaido.png"; return nightcal}
+            else if (db=="osaka"){img3.src = "./images/1135Osaka.png"}
+            else if (db== "hakata"){img3.src = "./images/1136hakata.png"};
+            }
+            else {img3.src = "./images/ngimg.png"}
+        });
+        
+
+
+
+
+
+
+
+
+
+        // お蔵入り↓↓
+
+        // // 送信してくるデータを監視する
+        // onChildAdded(dbRef, function (data) {
+        //     const record = data.val();
+        //     const key = data.key;
+        //     // Appendで要素の一番下に追加する
+        //     // $("#output").append(`<p>${record.date}:${record.weight} <button id="${key}" class="delete">削除</button>  </p>`)
+        //     $("#output").append(`<p>${record[0]}:${record[2]} kg <button id="${key}" class="delete">削除</button>  </p>`)
+
+        // })
+
+        // // /messageがクリックされたら発火する/
+        // $('#output').on('click', '.delete', function () {
+        //     const thisID = $(this).attr('id');
+        //     const recordRef = ref(db, "mcdmeter".thisID);
+        //     remove(recordRef);
+        //     // return thisID;
+        // }
+        // );
+
+        // お蔵入り↑↑
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
