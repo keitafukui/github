@@ -21,7 +21,16 @@ img{
 	height: auto;
 	vertical-align: top;
 }
-
+h1{
+	font-size: 30px;
+}
+#choice{
+	margin: 30px 10px;
+}
+#remcal{
+	margin: 30px 10px;
+	font-size: 30px;
+}
 
 /*--------------
  * header
@@ -87,15 +96,21 @@ img{
 }
 
 .date{
-	width: 30px;
-	size: 30;
+	width: 50px;
+	size: 100px;
 }
-.weight{
-	width: 30px;
-	size: 30;
+#weight{
+	width: 100px;
+	height: 30px;
+	font-size: 20px;
+}
+#taisha{
+	width: 250px;
+	height: 30px;
+	font-size: 30px;
 }
 
-#output {
+/* #output {
     width: 50%;
     height: 50px;
     border: solid 1px;
@@ -103,5 +118,19 @@ img{
     overflow-x:scroll;
     border-radius: 10px;
     background: whitesmoke;
+} */
+
+.img1 {
+	width: 30%;
+    height: 50px;
 }
 
+.img2 {
+	width: 30%;
+    height: 50px;
+}
+
+.img {
+	width: 30%;
+    height: 50px;
+}
