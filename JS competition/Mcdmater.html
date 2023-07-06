@@ -85,7 +85,9 @@
         </div>
 
         <div id="remcal"></div>
-
+        <div id="suggestion">
+            <img id="img4" src="">
+        </div>
 
 
     </main>
@@ -222,12 +224,14 @@
                 const Maxmenu = Math.max(menus.calory);
 
                 console.log(menu)
-                // users配列を1個ずつ繰り返し処理
 
             });
 
-            $("#remcal").append(`<p>あなたは本日${rmcal}kcal を節約！ </p>
-            <p>まだこれも食べて大丈夫！${rmmenu}</p>`);
+            rmmenu= "博多明太てりやきチキン";
+            $("#remcal").append(`<p>あなたは本日<span class= insert>${rmcal}kcal</span> を節約！ </p>
+            <p>まだこれも食べて大丈夫！ ⇒<span class= insert>${rmmenu}</span> </p>`);
+            img4.src = "./images/1136hakata.png";
+
         });
 
 
